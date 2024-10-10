@@ -11,10 +11,33 @@ type Pessoa struct {
 	Nick  string // 16 bytes
 } // 33 bytes??? | 8 * 5 = 40 bytes
 
+// Em Go, a escolha entre usar int e uint (inteiro sem sinal) para desempenho depende do caso de uso,
+// mas as diferenças de desempenho são geralmente pequenas,
+// a menos que você esteja lidando com processamento de dados em grande escala ou tarefas muito sensíveis à performance.
+//
+// Aqui estão algumas considerações:
+//   - Faixa de valores e Segurança:
+//     int: Representa inteiros com sinal e pode armazenar valores positivos e negativos. Em sistemas de 64 bits, o int é geralmente de 64 bits, e em sistemas de 32 bits, é de 32 bits.
+//     uint: Representa inteiros sem sinal, armazenando apenas números não negativos. Isso oferece uma faixa um pouco maior de valores positivos, mas não permite valores negativos.
+//   - Considerações de Desempenho:
+//     Tamanho e Uso de Memória: Tanto o int quanto o uint ocupam a mesma quantidade de memória (por exemplo, 64 bits em sistemas de 64 bits). A diferença está na capacidade de armazenar números: uint pode armazenar números positivos maiores, enquanto int pode armazenar números positivos e negativos.
+//     Operações Aritméticas: Não há uma diferença significativa no desempenho de operações aritméticas como adição, subtração ou multiplicação entre int e uint. CPUs modernas lidam bem com ambos os tipos.
+//     Overflow e Underflow: Usar uint requer mais cuidado para evitar o underflow (por exemplo, ao subtrair um número maior de um menor). Isso pode adicionar complexidade ao código em alguns casos.
+//     Conversões: Se o seu programa exigir muitas conversões entre int e uint, o overhead adicional dessas conversões pode impactar o desempenho de forma leve.
+//   - 3. Casos de Uso:
+//     Use int quando você precisar lidar com valores negativos ou não tiver certeza de que o valor sempre será positivo.
+//     Use uint quando você souber que só vai trabalhar com valores positivos e precisa de um alcance maior de números positivos.
+//     Em termos de desempenho, o uso de int ou uint não costuma gerar diferenças perceptíveis em operações aritméticas comuns, mas a escolha certa pode ajudar a evitar erros e otimizar a legibilidade e segurança do código.
 func main() {
 	var bool1 bool
+	var numInt8 int8
 	var numInt16 int16
-	var numUint16 uint8
+	var numInt32 int32
+	var numInt64 int64
+	var numUint8 uint8
+	var numUint16 uint16
+	var numUint32 uint32
+	var numUint64 uint64
 	var realFloat32 float32
 	var texto string
 	var estrutura1 Pessoa
@@ -48,8 +71,14 @@ func main() {
 
 	fmt.Println("#### USO DE MÉMORIA (byte = bits / 8) ####")
 	imprimir("bool1", unsafe.Sizeof(bool1))
+	imprimir("numInt8", unsafe.Sizeof(numInt8))
 	imprimir("numInt16", unsafe.Sizeof(numInt16))
+	imprimir("numInt32", unsafe.Sizeof(numInt32))
+	imprimir("numInt64", unsafe.Sizeof(numInt64))
+	imprimir("numUint8", unsafe.Sizeof(numUint8))
 	imprimir("numUint16", unsafe.Sizeof(numUint16))
+	imprimir("numUint32", unsafe.Sizeof(numUint32))
+	imprimir("numUint64", unsafe.Sizeof(numUint64))
 	imprimir("realFloat32", unsafe.Sizeof(realFloat32))
 	imprimir("texto", unsafe.Sizeof(texto))
 	imprimir("estrutura", unsafe.Sizeof(estrutura1))

@@ -7,5 +7,5 @@ import "fmt"
 // Escrever printa no console o texto auxiliar
 func Escrever() {
 	fmt.Println("Escrevendo do pacote auxiliar!")
-	escrever2()
+	escrever()
 }

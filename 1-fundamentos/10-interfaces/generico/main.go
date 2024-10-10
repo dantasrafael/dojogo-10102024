@@ -18,4 +18,12 @@ func main() {
 		"peso":  70.5,
 	}
 	fmt.Println(mapa)
+
+	// tipo genérico
+	var doideira interface{}
+	doideira = "Doideira"
+	fmt.Println(doideira)
+
+	doideira = 10
+	fmt.Println(doideira)
 }

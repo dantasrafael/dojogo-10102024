@@ -12,6 +12,12 @@ func calculosMatematicos(n1, n2 int8) (int8, int8) {
 	return soma, subtracao
 }
 
+func calculosMatematicos2(n1, n2 int8) (soma int8, subtracao int8) {
+	soma = n1 + n2
+	subtracao = n1 - n2
+	return
+}
+
 func main() {
 	soma := somar(3, 2)
 	fmt.Println(soma)
@@ -29,6 +35,6 @@ func main() {
 	resultadoSoma2, _ := calculosMatematicos(5, 15)
 	fmt.Println(resultadoSoma2)
 
-	_, resultadoSubtracao2 := calculosMatematicos(5, 15)
+	_, resultadoSubtracao2 := calculosMatematicos2(5, 15)
 	fmt.Println(resultadoSubtracao2)
 }

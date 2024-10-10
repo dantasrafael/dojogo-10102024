@@ -17,7 +17,7 @@ func main() {
 	for i := 0; i < 45; i++ {
 		tarefas <- i
 	}
-	close(tarefas)
+	defer close(tarefas)
 
 	for i := 0; i < 45; i++ {
 		resultado := <-resultados

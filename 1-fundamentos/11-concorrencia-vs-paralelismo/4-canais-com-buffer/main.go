@@ -7,12 +7,20 @@ import "fmt"
 // um canal bufferizado permite que várias mensagens sejam enviadas antes que o receptor precise consumi-las, até o limite do buffer.
 func main() {
 	canal := make(chan string, 2)
+	fmt.Println(cap(canal))
+
+	fmt.Println(len(canal))
 
 	canal <- "Olá mundo!"
 	canal <- "Programando em Go!"
 
+	fmt.Println(len(canal))
+
 	mensagem1 := <-canal
 	mensagem2 := <-canal
+
+	fmt.Println(len(canal))
+
 	fmt.Println(mensagem1)
 	fmt.Println(mensagem2)
 }
