@@ -1,3 +1,3 @@
-module desafio-time-josue
+module restaurante
 
-go 1.22
+go 1.22.8
