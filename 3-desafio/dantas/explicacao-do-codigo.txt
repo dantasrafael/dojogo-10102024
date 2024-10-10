@@ -1,0 +1,20 @@
+Explicação do código:
+Pedido e Item: Duas structs simples que representam os pedidos e seus itens. Cada pedido pode ter uma lista de itens e uma flag IsVIP que pode ser usada para priorização no desafio extra.
+
+Restaurante:
+pedidosCh: Um canal para armazenar e processar os pedidos recebidos.
+wgPedidos: Um WaitGroup que controla a sincronização do processamento de pedidos.
+
+Métodos:
+ReceberPedido: Adiciona um pedido à fila (canal) de pedidos.
+ProcessarPedidos: Consome pedidos do canal e os processa simultaneamente.
+processarPedido: Processa os itens de um pedido em paralelo, utilizando goroutines e um segundo WaitGroup para garantir que todos os itens sejam concluídos antes de marcar o pedido como "pronto".
+prepararItem: Simula o tempo de preparo de cada item do pedido.
+gerarPedido: Função auxiliar que gera pedidos com itens aleatórios, com uma chance de o pedido ser VIP.
+
+Main: Simula o funcionamento do restaurante. Ele gera e processa 5 pedidos de forma assíncrona, aguardando o processamento de todos os pedidos antes de encerrar.
+
+Melhorias e práticas adotadas:
+Clean Code: O código é modular, com responsabilidades bem definidas e funções pequenas e coesas.
+Sincronização: Uso de sync.WaitGroup para garantir que todas as goroutines finalizem antes de marcar o pedido como pronto e fechar o restaurante.
+Canais: Uso de canais para comunicar e sincronizar a chegada de novos pedidos e seu processamento.
