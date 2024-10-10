@@ -1,0 +1,29 @@
+*** Desafio: "Sistema de Pedidos em Restaurante"
+Os grupos serão responsáveis por simular o funcionamento de um restaurante onde vários pedidos são recebidos e processados em paralelo.
+Eles devem utilizar goroutines para criar as funções de recebimento e processamento dos pedidos, além de utilizar canais para sincronizar e comunicar o estado de cada pedido.
+
+*** Regras:
+1. Recebimento de Pedidos:
+Uma função deve simular o recebimento de pedidos em paralelo, onde cada pedido contém um número de itens.
+A função deve lançar uma goroutine para cada novo pedido.
+
+2. Processamento dos Pedidos:
+Uma segunda função deve processar os itens de cada pedido (ex.: preparar comida).
+O processamento de cada item deve ser feito em paralelo, utilizando uma goroutine por item.
+Use canais para comunicar o status do processamento de cada item.
+
+3. Controle de Conclusão:
+Utilizar WaitGroups ou outro mecanismo para garantir que o processamento de todos os itens de um pedido seja concluído antes de marcar o pedido como "pronto".
+
+4. Desafio Extra (para quem quiser se desafiar):
+Implementar um sistema de prioridade para pedidos, onde pedidos VIP são processados primeiro.
+Adicionar um timeout para simular quando um pedido leva tempo demais para ser processado.
+
+*** Objetivos:
+Usar goroutines para dividir o processamento de pedidos e itens.
+Utilizar canais para comunicação e controle de fluxo entre diferentes goroutines.
+Sincronizar o término das goroutines com WaitGroups ou canais.
+Grupos devem criar funções claras e dividir responsabilidades, simulando um ambiente real de processamento em paralelo.
+
+*** Avaliação:
+Os grupos serão avaliados com base na implementação de goroutines, uso correto de canais para comunicação e controle, e na capacidade de sincronizar as tarefas corretamente.
