@@ -20,6 +20,6 @@ func main() {
 		pages.ExecuteTemplate(w, "home.html", user)
 	})
 
-	fmt.Println("Escutando na porta 5000")
-	log.Fatal(http.ListenAndServe(":5000", nil))
+	fmt.Println("Escutando na porta 9090")
+	log.Fatal(http.ListenAndServe(":9090", nil))
 }

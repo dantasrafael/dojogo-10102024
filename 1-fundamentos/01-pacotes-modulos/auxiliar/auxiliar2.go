@@ -4,6 +4,6 @@ package auxiliar
 
 import "fmt"
 
-func escrever2() {
+func escrever() {
 	fmt.Println("Escrevendo da auxiliar2!!!")
 }
