@@ -7,45 +7,89 @@ import (
 	"time"
 )
 
+const pedidoTimeout = 5 * time.Second
+
 // Restaurante define o fluxo de recebimento e processamento dos pedidos.
 type Restaurante struct {
-	pedidosCh chan Pedido
-	wgPedidos sync.WaitGroup
+	pedidosVIPCh  chan Pedido
+	pedidosNormCh chan Pedido
+	wgPedidos     sync.WaitGroup
 }
 
 // NovoRestaurante cria uma nova instância de Restaurante.
 func NovoRestaurante(buffer int) *Restaurante {
 	return &Restaurante{
-		pedidosCh: make(chan Pedido, buffer),
+		pedidosVIPCh:  make(chan Pedido, buffer),
+		pedidosNormCh: make(chan Pedido, buffer),
 	}
 }
 
-// RecebePedido adiciona um novo pedido à fila para ser processado.
+// ReceberPedido adiciona um novo pedido à fila para ser processado.
 func (r *Restaurante) ReceberPedido(pedido Pedido) {
 	r.wgPedidos.Add(1)
+
 	go func() {
-		r.pedidosCh <- pedido
+		if pedido.IsVIP {
+			fmt.Printf("Recebido pedido VIP #%d\n", pedido.ID)
+			r.pedidosVIPCh <- pedido
+		} else {
+			fmt.Printf("Recebido pedido normal #%d\n", pedido.ID)
+			r.pedidosNormCh <- pedido
+		}
 	}()
 }
 
-// ProcessaPedidos processa todos os pedidos simultaneamente usando goroutines.
+// ProcessarPedidos processa todos os pedidos simultaneamente usando goroutines.
 func (r *Restaurante) ProcessarPedidos() {
-	for pedido := range r.pedidosCh {
-		go r.processarPedido(pedido)
+	go r.processarPedidosVIP()
+	go r.processarPedidosNormais()
+}
+
+// FecharRestaurante fecha o canal de pedidos e aguarda o término do processamento.
+func (r *Restaurante) FecharRestaurante() {
+	close(r.pedidosVIPCh)
+	close(r.pedidosNormCh)
+	r.wgPedidos.Wait()
+
+	fmt.Println("Todos os pedidos foram processados!")
+}
+
+// processarPedidosVIP processa os pedidos VIP.
+func (r *Restaurante) processarPedidosVIP() {
+	for pedido := range r.pedidosVIPCh {
+		go r.processarPedidoComTimeout(pedido)
 	}
 }
 
-// FechaRestaurante fecha o canal de pedidos e aguarda o término do processamento.
-func (r *Restaurante) FecharRestaurante() {
-	close(r.pedidosCh)
-	r.wgPedidos.Wait()
-	fmt.Println("Todos os pedidos foram processados!")
+// processarPedidosNormais processa os pedidos normais.
+func (r *Restaurante) processarPedidosNormais() {
+	for pedido := range r.pedidosNormCh {
+		go r.processarPedidoComTimeout(pedido)
+	}
+}
+
+// processarPedidoComTimeout processa cada pedido e cancela se ultrapassar o timeout.
+func (r *Restaurante) processarPedidoComTimeout(pedido Pedido) {
+	defer r.wgPedidos.Done()
+
+	done := make(chan bool)
+	go func() {
+		r.processarPedido(pedido)
+		pedido.Pronto = true
+		done <- true
+	}()
+
+	select {
+	case <-done:
+		fmt.Printf("Pedido #%d processado com sucesso.\n", pedido.ID)
+	case <-time.After(pedidoTimeout):
+		pedido.Expirado = true
+		fmt.Printf("Pedido #%d expirado! Tempo de processamento excedido.\n", pedido.ID)
+	}
 }
 
 // processaPedido processa cada item de um pedido.
 func (r *Restaurante) processarPedido(pedido Pedido) {
-	defer r.wgPedidos.Done()
-
 	fmt.Printf("Processando pedido #%d com %d itens...\n", pedido.ID, len(pedido.Items))
 
 	var wgItems sync.WaitGroup
@@ -55,7 +99,6 @@ func (r *Restaurante) processarPedido(pedido Pedido) {
 	}
 
 	wgItems.Wait()
-	fmt.Printf("Pedido #%d pronto!\n", pedido.ID)
 }
 
 // prepararItem simula o preparo de um item do pedido.
