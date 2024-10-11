@@ -18,3 +18,25 @@ Melhorias e práticas adotadas:
 Clean Code: O código é modular, com responsabilidades bem definidas e funções pequenas e coesas.
 Sincronização: Uso de sync.WaitGroup para garantir que todas as goroutines finalizem antes de marcar o pedido como pronto e fechar o restaurante.
 Canais: Uso de canais para comunicar e sincronizar a chegada de novos pedidos e seu processamento.
+
+
+---------------------------------------------------------------------------
+
+Mudanças no código (Desafio Extra):
+
+Prioridade para VIPs:
+Canais separados: Agora temos dois canais: pedidosVIPCh para pedidos VIP e pedidosNormCh para os normais. O restaurante processa os pedidos VIP primeiro e depois os normais.
+RecebePedido: Verifica se o pedido é VIP e coloca no canal apropriado.
+
+Timeout:
+processaPedidoComTimeout: Implementa o controle de tempo usando a função select. Se o pedido demorar mais do que o tempo definido (5 segundos), ele é marcado como expirado.
+Pedido.Expirado: Adicionada uma flag Expirado ao pedido para sinalizar quando ele não foi processado a tempo.
+
+Outras melhorias:
+Sync WaitGroups: Mantém o uso de WaitGroups para sincronização dos itens e pedidos, garantindo que tudo seja processado corretamente.
+Timeout flexível: Pode ajustar o valor de pedidoTimeout conforme o comportamento esperado.
+
+Comportamento:
+Pedidos VIP são sempre processados antes dos normais.
+Se o processamento de um pedido ultrapassar o limite de 5 segundos, ele será cancelado e exibido como "expirado".
+Simulação: O código cria e processa uma série de pedidos, onde uma fração deles será VIP, e o timeout é aplicado dinamicamente.

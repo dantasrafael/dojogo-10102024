@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// Processamento dos pedidos em paralelo
-	go restaurante.ProcessarPedidos()
+	restaurante.ProcessarPedidos()
 
 	// Aguarda por um tempo antes de encerrar o restaurante
 	time.Sleep(10 * time.Second)
